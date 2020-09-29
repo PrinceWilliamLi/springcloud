@@ -1,0 +1,89 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <p>
+  * $!{table.comment} Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.mapperName}  {
+
+        /**
+        * 获取list
+        * @param ${table.entityPath}
+        * @return
+        */
+        List<${entity}> get${entity}List(${entity} ${table.entityPath});
+
+        /**
+        * 新增数据
+        * @param ${table.entityPath}
+        * @return
+        */
+        int ${table.entityPath}Add( ${entity} ${table.entityPath});
+
+        /**
+        * 更新数据
+        * @param ${table.entityPath}
+        * @return
+        */
+        int ${table.entityPath}Update( ${entity} ${table.entityPath});
+        /**
+        * 更新空数据   慎用
+        * @param ${table.entityPath}
+        * @return
+        */
+        int updateNull( ${entity} ${table.entityPath});
+
+        /**
+        * 批量添加
+        * @param list
+        * @return
+        */
+        int batchAdd(List<${entity}> list);
+
+        /**
+        * 批量更新
+        * @param list
+        * @return
+        */
+        int batchUpdate(List<${entity}> list);
+
+        /**
+        * 批量物理删除
+        * @param list
+        * @return
+        */
+        int batchDelete(List<${entity}> list);
+        /**
+        * 分页查询
+        * @param ${table.entityPath}
+        * @return
+        */
+        List<${entity}> selectPage(${entity} ${table.entityPath});
+
+        /**
+        * 获取详情
+        * @param ${table.entityPath}
+        * @return
+        */
+        ${entity} getOne(${entity} ${table.entityPath});
+
+        /**
+        * 通过id 获取详情
+        * @param id
+        * @return
+        */
+        ${entity} getOneById(Long id);
+
+}
+
+
+

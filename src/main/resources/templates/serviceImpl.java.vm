@@ -1,0 +1,104 @@
+package ${package.ServiceImpl};
+
+import lombok.extern.slf4j.Slf4j;
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
+import org.apache.commons.lang3.StringUtils;
+import javax.annotation.Resource;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.cloud.common.page.PageDomain;
+import java.util.List;
+import java.util.Map;
+import com.cloud.common.utils.ResultGenerator;
+import com.cloud.common.vo.sys.Result;
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+@Transactional(transactionManager="transactionManager",rollbackFor = {RuntimeException.class},propagation = Propagation.REQUIRED)
+@Slf4j
+public class ${table.serviceImplName}  {
+
+      @Resource
+      private ${table.mapperName} ${table.entityPath}Mapper;
+
+      /**
+      * 查询list数据
+      * @return
+      */
+      public List get${entity}List(${entity} ${table.entityPath}) {
+            return ${table.entityPath}Mapper.get${entity}List(${table.entityPath});
+      }
+
+
+      /**
+       * 获取对象
+       * @return
+       */
+      public ${entity} getOne( ${entity} ${table.entityPath}) {
+            return ${table.entityPath}Mapper.getOne(${table.entityPath});
+      }
+
+
+      /**
+      * 获取对象通过id
+      * @return
+      */
+      public ${entity} getOneById( Long id) {
+            return ${table.entityPath}Mapper.getOneById(id);
+      }
+
+
+      /**
+      * 添加
+      * @return
+      */
+      public Result ${table.entityPath}Add( ${entity} ${table.entityPath}) {
+            try {
+                  return ResultGenerator.genSuccessResult(${table.entityPath}Mapper.${table.entityPath}Add(${table.entityPath}));
+            }catch (Exception e){
+                  throw  new RuntimeException("${table.comment}新增失败");
+            }
+      }
+
+      /**
+      * @return
+      */
+      public Result ${table.entityPath}Update( ${entity} ${table.entityPath}) {
+            try {
+                  return ResultGenerator.genSuccessResult(${table.entityPath}Mapper.${table.entityPath}Update(${table.entityPath}));
+            }catch (Exception e){
+                  throw  new RuntimeException("${table.comment}更新失败");
+            }
+      }
+
+      /**
+       * 分页
+       * @return
+       */
+      public List<${entity}> getPageInfo(${entity} ${table.entityPath}) {
+              return ${table.entityPath}Mapper.selectPage(${table.entityPath});
+      }
+
+      /**
+      * 根据id删除对象
+      * 自行写删除操作
+      * @param id 实体ID
+      * @return 0 失败 1 成功
+      */
+      public int ${table.entityPath}Delete(Long id){
+
+            return 1;
+      }
+
+}

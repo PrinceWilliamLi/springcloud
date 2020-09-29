@@ -1,0 +1,129 @@
+package ${package.Controller};
+
+
+
+
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+import com.cloud.common.vo.sys.PageResult;
+import org.springframework.web.bind.annotation.*;
+import javax.annotation.Resource;
+import ${package.ServiceImpl}.${table.serviceImplName};
+import ${package.Entity}.${entity};
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Map;
+import com.cloud.common.page.PageDomain;
+import com.github.pagehelper.PageInfo;
+import com.cloud.common.utils.ResultGenerator;
+import com.cloud.common.vo.sys.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import java.util.List;
+
+/**
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Api(tags = "*****", description = "****模块")
+@RestController
+@RequestMapping("/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+        private final Logger logger = LoggerFactory.getLogger(${table.controllerName}.class);
+
+        @Resource
+        public ${table.serviceImplName} ${table.entityPath}Service;
+
+        /**
+        * 分页查询数据
+        * @return
+        */
+        @ApiOperation("分页")
+        @ResponseBody
+        @PostMapping("/page")
+        public PageResult<PageResult.Page<${entity}>> get${entity}PageList(@RequestBody ${entity} ${table.entityPath}) {
+                startPage();
+                List<${entity}> list = ${table.entityPath}Service.getPageInfo(${table.entityPath});
+                return PageResult.toPageResult(list);
+        }
+
+        /**
+        * 根据id查询
+        *
+        * @return
+        */
+        @ApiOperation("根据id查询")
+        @ApiImplicitParam(name = "id", value = "主键id", required = true, dataType = "long", paramType = "path")
+        @ResponseBody
+        @GetMapping("/{id}")
+        public Result<${entity}> getOneById(@PathVariable Long id) {
+                return ResultGenerator.genSuccessResult(${table.entityPath}Service.getOneById(id));
+        }
+
+        /**
+        * 添加
+        * @return
+        */
+        @ApiOperation("新增")
+        @PostMapping
+        public Result<${entity} > ${table.entityPath}Add(@RequestBody ${entity} ${table.entityPath}) {
+                return ${table.entityPath}Service.${table.entityPath}Add(${table.entityPath});
+        }
+
+        /**
+        * 修改
+        * @return
+        */
+        @ApiOperation("修改")
+        @PutMapping
+        public Result<${entity} > ${table.entityPath}Update(@RequestBody ${entity} ${table.entityPath}) {
+                return ${table.entityPath}Service.${table.entityPath}Update(${table.entityPath});
+
+        }
+
+        /**
+        * 根据id删除对象
+        * @param id 实体ID
+        * @return 0 失败 1 成功
+        */
+        @ApiOperation("删除")
+        @ApiImplicitParam(name = "id", value = "主键id", required = true, dataType = "long", paramType = "path")
+        @ResponseBody
+        @DeleteMapping("/{id}")
+        public int ${table.entityPath}Delete(@PathVariable("id") Long id){
+            int count = 0;
+            try {
+##                count = ${table.entityPath}Service.deleteById(id) ? 1 : 0;
+            }catch (Exception e){
+                logger.error("${table.entityPath}Delete -=- {}",e.toString());
+            }
+            return count;
+        }
+
+##        /**
+##        * 批量删除对象
+##        * @param item 实体集合ID
+##        * @return 0 失败 1 成功
+##        */
+##        @ResponseBody
+##        @RequestMapping(method= RequestMethod.POST,value="/${table.entityPath}BatchDelete")
+##        public int deleteBatchIds(String item){
+##            int count = 0;
+##            try {
+##                String[] ids = item.split(",");
+##                count = SysUserService.deleteBatchIds(ids) ? 1 : 0;
+##            }catch (Exception e){
+##                logger.error("${table.entityPath}BatchDelete -=- {}",e.toString());
+##            }
+##            return count;
+##        }
+
+}

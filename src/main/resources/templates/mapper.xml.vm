@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${package.Mapper}.${table.mapperName}">
+
+    #if(${enableCache})
+         <!-- 开启二级缓存 -->
+         <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    #end
+    #if(${baseResultMap})
+         <!-- 通用查询映射结果 -->
+         <resultMap id="BaseResultMap" type="${package.Entity}.${entity}">
+        #foreach($field in ${table.fields})
+            #if(${field.keyFlag})##生成主键排在第一位
+                   <id column="${field.name}" property="${field.propertyName}" />
+            #end
+        #end
+        #foreach($field in ${table.commonFields})##生成公共字段
+             <result column="${field.name}" property="${field.propertyName}" />
+        #end
+        #foreach($field in ${table.fields})
+            #if(!${field.keyFlag})##生成普通字段
+                   <result column="${field.name}" property="${field.propertyName}" />
+            #end
+        #end
+         </resultMap>
+
+    #end
+    #if(${baseColumnList})
+          <!-- 通用查询结果列 -->
+          <sql id="Base_Column_List">
+    #foreach($field in ${table.commonFields})
+             #if(${field.name} == ${field.propertyName})${field.name}#else${field.name} AS ${field.propertyName}#end,
+    #end
+            ${table.fieldNames}
+          </sql>
+    #end
+
+    <sql id="wheresql">
+        #foreach($field in ${table.fields})
+            <if test="${field.propertyName} != null">
+                and ${field.name} = #{ ${field.propertyName} }
+            </if>
+        #end
+    </sql>
+
+##    <select id="get${entity}List" parameterType="${package.Entity}.${entity}" resultMap="BaseResultMap">
+##        select
+##        *
+##        from ${table.name}
+##        <where>
+##            <include refid="wheresql"></include>
+##        </where>
+##    </select>
+##
+##    <select id="getOne" parameterType="${package.Entity}.${entity}" resultType="${package.Entity}.${entity}">
+##        select
+##        <include refid="Base_Column_List" />
+##        from ${table.name}
+##        <where>
+##            <include refid="wheresql"></include>
+##        </where>
+##    </select>
+##
+##
+##    <select id="getOneById" parameterType="java.lang.Long" resultType="${package.Entity}.${entity}">
+##        select
+##        <include refid="Base_Column_List" />
+##        from ${table.name}
+##        where is_delete = 0
+##        #foreach($field in ${table.fields})
+##            #if(${field.keyFlag})##生成主键排在第一位
+##                 and ${field.name} = #{id}
+##            #end
+##        #end
+##    </select>
+##
+##    <insert id="batchAdd" parameterType="java.util.List" #foreach($field in ${table.fields})
+##        #if(${field.keyFlag})##生成主键排在第一位
+##            keyColumn="${field.propertyName}" keyProperty = "${field.propertyName}"
+##        #end
+##    #end   useGeneratedKeys="true">
+##
+##            insert into ${table.name}
+##
+##            (
+##            <trim suffixOverrides=",">
+##                #foreach($field in ${table.fields})
+##                    ${field.name},
+##                #end
+##            </trim>
+##            )
+##
+##            values
+##            <foreach collection ="list" item="item" index= "index" separator =",">
+##             (
+##                <trim suffixOverrides=",">
+##                #foreach($field in ${table.fields})
+##                        #{item.${field.propertyName}},
+##                #end
+##                </trim>
+##             )
+##            </foreach>
+##    </insert>
+##
+##
+##
+##    <insert id="${table.entityPath}Add" parameterType="${package.Entity}.${entity}" #foreach($field in ${table.fields})
+###if(${field.keyFlag})##生成主键排在第一位
+##keyColumn="${field.propertyName}" keyProperty = "${field.propertyName}"
+###end
+###end   useGeneratedKeys="true">
+##            INSERT INTO  ${table.name}
+##            <trim prefix="(" suffix=")" suffixOverrides=",">
+##                #foreach($field in ${table.fields})
+##                    <if test="${field.propertyName} != null">
+##                        ${field.name},
+##                    </if>
+##                #end
+##            </trim>
+##
+##            <trim prefix="values (" suffix=")" suffixOverrides=",">
+##                #foreach($field in ${table.fields})
+##                    <if test="${field.propertyName} != null">
+##                        #{${field.propertyName}},
+##                    </if>
+##                #end
+##            </trim>
+##    </insert>
+##
+##    <update id="${table.entityPath}Update" parameterType="${package.Entity}.${entity}" >
+##            update ${table.name}
+##            <set>
+##                #foreach($field in ${table.fields})
+##                    #if(!${field.keyFlag})
+##                    <if test="${field.propertyName} != null">
+##                        ${field.name} = #{ ${field.propertyName} },
+##                    </if>
+##                    #end
+##                #end
+##            </set>
+##            #foreach($field in ${table.fields})
+##                #if(${field.keyFlag})##生成主键排在第一位
+##                    where ${field.name} = #{${field.propertyName}}
+##                #end
+##            #end
+##    </update>
+##
+##    <update id="updateNull" parameterType="${package.Entity}.${entity}" >
+##        update ${table.name}
+##        <set>
+##            #foreach($field in ${table.fields})
+##                #if(!${field.keyFlag})
+##                    ${field.name} = #{ ${field.propertyName} },
+##                #end
+##            #end
+##        </set>
+##        #foreach($field in ${table.fields})
+##            #if(${field.keyFlag})##生成主键排在第一位
+##                where ${field.name} = #{${field.propertyName}}
+##            #end
+##        #end
+##    </update>
+##
+##    <update id="batchUpdate"  parameterType="java.util.List">
+##        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+##            update ${table.name}
+##            <set>
+##                #foreach($field in ${table.fields})
+##                    #if(!${field.keyFlag})
+##                        <if test="item.${field.propertyName} != null">
+##                            ${field.name} = #{ item.${field.propertyName} },
+##                        </if>
+##                    #end
+##                #end
+##            </set>
+##            #foreach($field in ${table.fields})
+##                #if(${field.keyFlag})##生成主键排在第一位
+##                    where ${field.name} = #{item.${field.propertyName}}
+##                #end
+##            #end
+##        </foreach>
+##    </update>
+##    <delete id="batchDelete"  parameterType="java.util.List">
+##        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+##            delete from ${table.name}
+##            #foreach($field in ${table.fields})
+##                #if(${field.keyFlag})##生成主键排在第一位
+##                    where ${field.name} = #{item.${field.propertyName}}
+##                #end
+##            #end
+##        </foreach>
+##    </delete>
+##
+##    <select id="selectPage"  parameterType="${package.Entity}.${entity}" resultMap="BaseResultMap">
+##        select
+##        <include refid="Base_Column_List" />
+##        from  ${table.name}
+##        <where>
+##            <include refid="wheresql"></include>
+##        </where>
+##    </select>
+</mapper>
