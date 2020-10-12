@@ -44,7 +44,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!--websocket-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>4.3.21.RELEASE</version>
+        </dependency>
 
     </dependencies>
     <build>
@@ -54,6 +59,16 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+<!--        <resources>-->
+
+<!--            <resource>-->
+<!--                <directory>src/main/webapp/WEB-INF/jsp</directory>-->
+<!--                <targetPath>META-INF/resources</targetPath>-->
+<!--                <includes>-->
+<!--                    <include>**/*.*</include>-->
+<!--                </includes>-->
+<!--            </resource>-->
+<!--        </resources>-->
     </build>
 
 </project>

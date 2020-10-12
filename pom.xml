@@ -24,6 +24,7 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+        <springboot.verson>2.3.3.RELEASE</springboot.verson>
     </properties>
 
     <dependencies>
@@ -31,6 +32,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--        </dependency>-->
         <!--<dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
@@ -47,6 +53,7 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>2.0.1.RELEASE</version>
         </dependency>
+
         <!--注意：spring boot对jsp的支持不是很好，在使用spring boot自带tomcat的同时，还需要引入另外的一个tomcat，以来如下所示，且scope属性需要被注释掉 -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
@@ -63,6 +70,13 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+<!--        &lt;!&ndash;热部署配置&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-devtools</artifactId>-->
+<!--            <version>1.5.18.RELEASE</version>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
         <!-- springboot lombok注解，用于省略GetSet等方法的代码编写内容 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
